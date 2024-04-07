@@ -2,12 +2,22 @@
 name = "rust-example-workspace"
 version = "0.1.0"
 edition = "2021"
-
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-
 [workspace]
 members = [ "axum-example", "clickhouse-exmaple", "rayon-exmaple", "redis-example","rust-example", "sea-orm-example", "tokio-example"]
-
+[dependencies]
 [workspace.dependencies]
+axum = { version = "0.7" }
+axum-extra = { version = "0" }
+tokio = { version = "1", features = ["full"] }
+# 用于读取.env文件中的参数
+dotenvy = "0"
+# 用于解析请求为json
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1" }
+# 用于处理错误
+anyhow = { version = "1" }
+thiserror = { version = "1" }
+sea-orm = { version = "0.12", features = ["sqlx-postgres", "runtime-tokio-native-tls", "macros"] }
+clickhouse = {version = "0.11"}
+rayon = {version = "1.10.0"}
