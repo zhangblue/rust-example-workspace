@@ -1,11 +1,16 @@
 [package]
-name = "sea-orm-example"
+name = "rabbitmq-example"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-sea-orm = { workspace = true }
+# rabbitmq queue连接
+lapin = { workspace = true }
 tokio = { workspace = true }
+chrono = { workspace = true }
 anyhow = { workspace = true }
+tokio-stream = { workspace = true }
+
+amiquip = { workspace = true }
