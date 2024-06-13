@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package grpc.example.streaming;
+
+// The greeting service definition.
+service MsgApi {
+  // Sends a greeting
+  rpc ServerStreamingEcho (stream MsgRequest) returns (MsgResponse) {}
+}
+
+// The request message containing the user's name.
+message MsgRequest {
+  // agent 编号
+  string agent_id = 1;
+  // agent 类型
+  string agent_type = 2;
+  // 数据体
+  string msg_data = 3;
+}
+
+// The response message containing the greetings
+message MsgResponse {
+  string message = 1;
+}

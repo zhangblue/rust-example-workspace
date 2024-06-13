@@ -5,4 +5,9 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[[bin]]
+name = "redis-ttl"
+path = "src/ttl/redis-ttl.rs"
+
 [dependencies]
+redis = { version = "0.25.4", features = ["tokio-comp"] }

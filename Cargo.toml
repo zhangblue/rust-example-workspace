@@ -5,6 +5,7 @@ resolver = "2"
 members = [
     "axum-example",
     "clickhouse-exmaple",
+    "grpc-example",
     "rabbitmq-example",
     "rayon-exmaple",
     "redis-example",
