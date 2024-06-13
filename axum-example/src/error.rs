@@ -30,6 +30,7 @@ impl IntoResponse for Error {
         let mut response = StatusCode::INTERNAL_SERVER_ERROR.into_response();
 
         // 向response中插入Error
+        println!("  ->> 向response的扩展空间中插入Error");
         response.extensions_mut().insert(self);
 
         response
@@ -49,10 +50,10 @@ impl Error {
             Self::TicketDeleteFailIdNotFound { .. } => {
                 (StatusCode::BAD_REQUEST, ClientError::INVALID_PARAMS)
             } // -- Fallback 最后兜底的类型
-              // _ => (
-              //     StatusCode::INTERNAL_SERVER_ERROR,
-              //     ClientError::SERVICE_ERROR,
-              // ),
+            // _ => (
+            //     StatusCode::INTERNAL_SERVER_ERROR,
+            //     ClientError::SERVICE_ERROR,
+            // ),
         }
     }
 }

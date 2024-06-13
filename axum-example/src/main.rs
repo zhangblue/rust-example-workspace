@@ -56,12 +56,13 @@ async fn main() -> error::Result<()> {
 
 // 统一response
 async fn main_response_mapper(
-    ctx: Option<Ctx>,
+    ctx: Option<Ctx>, // 向req中放入的值为Err时，会自动转换成None。如果放入的是Ok，则自动转为Some
     uri: Uri,
     req_method: Method,
     res: Response,
 ) -> Response {
-    println!("->> {:12} - main_response_mapper", "RES_MAPPER");
+    println!("->> {:12} - main_response_mapper", "统一 response 格式化");
+    println!("  ->> 此处会触发调用Ctx的提取器. 当前ctx为：[{:?}]", ctx);
 
     let uuid = Uuid::new_v4();
 
@@ -79,7 +80,7 @@ async fn main_response_mapper(
                     "req_uuid":uuid.to_string()
                 }
             });
-            println!("  ->> client_error_body: {client_error_body}");
+            println!("  ->> client_error_body（返回给客户端的信息）: {client_error_body}");
 
             // 根据 client_error_body 创建一个新的 response
             (*status_code, Json(client_error_body)).into_response()

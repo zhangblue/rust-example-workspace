@@ -26,7 +26,7 @@ async fn create_ticket(
     ctx: Ctx,                          // 调用提取器并得到的参数
     Json(ticket_fc): Json<TicketForCreate>,
 ) -> Result<Json<Ticket>> {
-    println!("->> {:<12} - create_ticket", "HANDLER");
+    println!("->> {:<12} - create_ticket", "处理程序");
 
     println!("从handler中获取到提取器中的参数 = {}", ctx.user_id());
     let ticket = mc.create_ticket(ctx, ticket_fc).await?;
@@ -36,7 +36,7 @@ async fn create_ticket(
 
 // 这里状态类型不必改为 AppState 类型，axum可以自动从 AppState 中得到 ModelController.
 async fn list_tickets(State(mc): State<ModelController>, ctx: Ctx) -> Result<Json<Vec<Ticket>>> {
-    println!("->> {:<12} - list_tickets", "HANDLER");
+    println!("->> {:<12} - list_tickets", "处理程序");
     let tickets = mc.list_tickets(ctx).await?;
 
     Ok(Json(tickets))
@@ -47,7 +47,7 @@ async fn delete_ticket(
     Path(id): Path<u64>,
     ctx: Ctx,
 ) -> Result<Json<Ticket>> {
-    println!("->> {:<12} - delete_ticket", "HANDLER");
+    println!("->> {:<12} - delete_ticket", "处理程序");
     let ticket = mc.delete_ticket(ctx, id).await?;
     Ok(Json(ticket))
 }
