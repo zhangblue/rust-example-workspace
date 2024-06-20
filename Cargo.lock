@@ -487,7 +487,10 @@ dependencies = [
  "anyhow",
  "async-trait",
  "axum 0.7.5",
+ "chrono",
  "lazy-regex",
+ "log",
+ "sea-orm",
  "serde",
  "serde_json",
  "serde_with",
@@ -3063,6 +3066,7 @@ dependencies = [
  "trie-rs",
  "uri-pattern-matcher",
  "url 2.5.0",
+ "uuid",
 ]
 
 [[package]]

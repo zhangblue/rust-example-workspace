@@ -19,7 +19,9 @@ pub enum Error {
     AuthFailCtxNotInRequestExt, // 从请求中没有找到Ctx内容
 
     // Model errors
-    TicketDeleteFailIdNotFound { id: u64 }, // 删除ticket时，id没有找到错误
+    TicketDeleteFailIdNotFound { id: String }, // 删除ticket时，id没有找到错误
+    UserDeleteFailIdNotFound { id: String }, // 删除user时，id没有找到错误
+    DatabaseConnectionFail { msg: String }, // 数据库链接错误
 }
 
 impl IntoResponse for Error {
@@ -47,13 +49,17 @@ impl Error {
             | Self::AuthFailTokenWrongFormat
             | Self::AuthFailCtxNotInRequestExt => (StatusCode::FORBIDDEN, ClientError::NO_AUTH),
             // -- Model
-            Self::TicketDeleteFailIdNotFound { .. } => {
+            Self::TicketDeleteFailIdNotFound { .. } | Self::UserDeleteFailIdNotFound { .. } => {
                 (StatusCode::BAD_REQUEST, ClientError::INVALID_PARAMS)
             } // -- Fallback 最后兜底的类型
             // _ => (
             //     StatusCode::INTERNAL_SERVER_ERROR,
             //     ClientError::SERVICE_ERROR,
             // ),
+            // 服务异常
+            Self::DatabaseConnectionFail { .. } => {
+                (StatusCode::INTERNAL_SERVER_ERROR, ClientError::SERVICE_ERROR)
+            }
         }
     }
 }
@@ -64,5 +70,5 @@ pub enum ClientError {
     LOGIN_FAIL,     // 登录失败错误
     NO_AUTH,        // 没有认证错误
     INVALID_PARAMS, // 无效参数错误
-    _SERVICE_ERROR, // 其他的服务异常，这是最后的兜底类型
+    SERVICE_ERROR, // 其他的服务异常，这是最后的兜底类型
 }

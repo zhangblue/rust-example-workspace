@@ -54,7 +54,7 @@ struct RequestLogLine {
     uuid: String, // uuid string formatted
     timestamp: String,
     // -- 用户和上下文属性
-    user_id: Option<u64>,
+    user_id: Option<i32>,
 
     // http 请求属性
     req_path: String,

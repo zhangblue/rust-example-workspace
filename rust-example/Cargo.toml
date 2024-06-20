@@ -34,3 +34,4 @@ url = { workspace = true }
 anyhow = { workspace = true }
 
 sysinfo = "0.30.12"
+uuid = { version = "1.8.0", features = ["v4"] }

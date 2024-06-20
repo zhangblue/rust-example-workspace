@@ -6,19 +6,19 @@ use crate::error::Error;
 
 #[derive(Clone, Debug)]
 pub struct Ctx {
-    user_id: u64, // 用户id，从cookie解析出来的
+    user_id: i32, // 用户id，从cookie解析出来的
 }
 
 // 构造器
 impl Ctx {
-    pub fn new(user_id: u64) -> Self {
+    pub fn new(user_id: i32) -> Self {
         Ctx { user_id }
     }
 }
 
 // 参数访问
 impl Ctx {
-    pub fn user_id(&self) -> u64 {
+    pub fn user_id(&self) -> i32 {
         self.user_id
     }
 }

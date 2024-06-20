@@ -13,22 +13,29 @@ use tower_cookies::CookieManagerLayer;
 use tower_http::services::ServeDir;
 use uuid::Uuid;
 
-use crate::{error::Error, log::log_request, model::ModelController};
+use crate::{error::Error, log::log_request};
+use crate::web::common::{ApplicationStat};
+use crate::web::{ticket, user};
 
 mod ctx;
 mod error;
 mod log;
-mod model;
 mod web;
+mod entity;
+
+mod connector;
 
 #[tokio::main]
 async fn main() -> error::Result<()> {
     // 初始化 ModelController
-    let mc = ModelController::new().await?;
+    let mc = ApplicationStat::new().await?;
 
     // 只给 /api下的所有url添加auth-token验证。其他的url不受这个中间件的影响
-    let routes_apis = web::routes_tickets::routes(mc.clone())
-        .route_layer(middleware::from_fn(web::mw_auth::mw_require_auth));
+    let routes_apis =
+        ticket::routes_tickets::routes(mc.clone()) // 添加ticket 接口
+            .merge(user::routes_users::routes(mc.clone()))// 添加user接口
+            .route_layer(middleware::from_fn(web::mw_auth::mw_require_auth));
+
 
     let routes_all = Router::new()
         .merge(routes_hello()) // 测试的路由
@@ -37,7 +44,7 @@ async fn main() -> error::Result<()> {
         .layer(axum::middleware::map_response(main_response_mapper)) // 设置response的统一处理中间件
         .layer(
             // 首先这个中间件是为了从Cookie中提取数据并校验auth-token, 所以位置必须是在 CookieManagerLayer 中间件的后面执行。同时因为要将Ctx放入请求扩展中，方便后续中间件与handler通过自定义提取器 mw_require_auth 中提取Ctx，所以当前 mv_ctx_resolver 中间件必须是在
-            axum::middleware::from_fn_with_state(mc.clone(), web::mw_auth::mv_ctx_resolver),
+            axum::middleware::from_fn_with_state(mc, web::mw_auth::mv_ctx_resolver),
         )
         .layer(CookieManagerLayer::new()) // cookie管理器。用于在 HTTP 请求和响应之间进行 Cookie 的传递和管理
         .fallback_service(routes_static()); // 如果访问失败，设置静态资源

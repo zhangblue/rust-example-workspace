@@ -12,7 +12,7 @@ pub fn routes() -> Router {
     Router::new().route("/api/login", post(api_login))
 }
 
-async fn api_login(cookies: Cookies, Json(playload): Json<LoginPlayload>) -> Result<Json<Value>> {
+async fn api_login(cookies: Cookies, Json(playload): Json<LoginPlayLoad>) -> Result<Json<Value>> {
     println!("->> {:<12} - api_login", "HANDLER");
 
     // TODO: 实现真正的数据库权限登录
@@ -34,7 +34,7 @@ async fn api_login(cookies: Cookies, Json(playload): Json<LoginPlayload>) -> Res
 }
 
 #[derive(Debug, Deserialize)]
-struct LoginPlayload {
+struct LoginPlayLoad {
     username: String,
     pwd: String,
 }

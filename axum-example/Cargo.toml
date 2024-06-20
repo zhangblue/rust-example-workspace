@@ -11,6 +11,10 @@ tokio = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 serde_with = { version = "3.8.1" } # 用于自定义序列化与反序列化函数
+# 数据库操作
+sea-orm = { workspace = true }
+# 操作时间
+chrono = { workspace = true }
 # Axum
 axum = { workspace = true }
 tower-http = { version = "0.5.2", features = ["fs"] }
@@ -19,7 +23,8 @@ tower-cookies = "0.10.0"                              # 用来操作cookie
 lazy-regex = "3.1.0"                                        # 惰性正则解析
 async-trait = "0.1.80"
 strum_macros = "0.26.2"                                     # 用于处理枚举,可以将枚举转化为有格式的字符串
-uuid = { version = "1.8.0", features = ["v4", "fast-rng"] } # 用于生成和解析uuid
+uuid = { version = "1.8.0", features = ["v4", "fast-rng"] }
+log = "0.4.21" # 用于生成和解析uuid
 
 [dev-dependencies]
 anyhow = { workspace = true }

@@ -7,9 +7,9 @@ use lazy_regex::regex_captures;
 use tower_cookies::{Cookie, Cookies};
 
 use crate::ctx::Ctx;
-use crate::model::ModelController;
 use crate::web::AUTH_TOKEN;
 use crate::{error::Error, error::Result};
+use crate::web::common::ApplicationStat;
 
 // 自定义中间件。用于登录状态检查；检查cookie中的内容是否正确
 pub async fn mw_require_auth(
@@ -29,7 +29,7 @@ pub async fn mw_require_auth(
 
 // 自定义中间件。用于ctx的分析器，加速 from_request_parts 提取器在进行token验证时耗时，但可能被调用多次的情况
 pub async fn mv_ctx_resolver(
-    State(_mc): State<ModelController>, // 共享状态，里面可以放数据库连接。在此例子中没有使用
+    State(_mc): State<ApplicationStat>, // 共享状态，里面可以放数据库连接。在此例子中没有使用
     cookies: Cookies,
     mut req: Request,
     next: Next,
@@ -68,13 +68,13 @@ pub async fn mv_ctx_resolver(
 
 /// 解析token 格式为 `user-[user-id].[expiration].[signature]`
 /// 返回信息 (user_id, expiration, signature)
-fn parse_token(token: String) -> Result<(u64, String, String)> {
+fn parse_token(token: String) -> Result<(i32, String, String)> {
     // regex_captures 这个宏返回的内容 (正则能够匹配到的全部内容,第一个括号匹配到的内容user_id, 第二个括号匹配到的内容expiration, 第三个括号匹配到的内容signature)。如果匹配不到则返回错误信息
     let (_whole, user_id, exp, sign) = regex_captures!(r#"^user-(\d+)\.(.+)\.(.+)"#, &token)
         .ok_or(Error::AuthFailTokenWrongFormat)?;
 
     // 判断解析道的user_id是否是一个u64类型，如果不是则返回错误
-    let user_id: u64 = user_id
+    let user_id: i32 = user_id
         .parse()
         .map_err(|_| Error::AuthFailTokenWrongFormat)?;
 
